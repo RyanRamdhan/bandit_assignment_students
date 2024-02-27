@@ -34,7 +34,18 @@ class LearningCurvePlot:
         ''' name: string for filename of saved figure '''
         self.ax.legend()
         self.fig.savefig(name,dpi=300)
-
+        
+    def create_plot(reward_array, smoothing_window):
+        plot = plt.plot(np.arange(reward_array.shape[0]), reward_array)
+        plt.xlabel('Timesteps')
+        plt.ylabel('Average Reward')
+        plt.title('Average Reward over Timesteps')
+        plt.yticks(np.arange(0, 1.1, 0.1))
+        plt.xticks(np.arange(0, reward_array.shape[0], 50))
+        smooth(reward_array, smoothing_window)
+        plt.show()
+    
+    
 class ComparisonPlot:
 
     def __init__(self,title=None):
@@ -64,6 +75,8 @@ def smooth(y, window, poly=1):
     y: vector to be smoothed 
     window: size of the smoothing window '''
     return savgol_filter(y,window,poly)
+
+
 
 if __name__ == '__main__':
     # Test Learning curve plot

@@ -28,12 +28,31 @@ def experiment(n_actions, n_timesteps, n_repetitions, smoothing_window):
     pass
 
 def run_repetitions(n_timesteps, n_repetitions):
+    cumulative_rewards = np.zeros(n_timesteps)
+    reward_array = np.zeros(n_repetitions)
     for i in range(n_repetitions):
-        BanditEnvironment(EgreedyPolicy())
+        env = BanditEnvironment(n_actions=10)
+        policy = EgreedyPolicy(n_actions=10)
+        total_reward = 0
         for n in range(n_timesteps):
-             a = BanditEnvironment(EgreedyPolicy().select_action(epsilon=0.1))
-             r = BanditEnvironment(EgreedyPolicy().Q_a[a])
-             BanditEnvironment(EgreedyPolicy().update(a,r))
+             a = policy.select_action(epsilon=0.1)
+             r = env.act(a)
+             policy.update(a, r)
+             total_reward += r
+             cumulative_rewards[n] += r
+        reward_array[i] += total_reward
+        print(total_reward)
+        
+    for reward in reward_array:
+        reward = reward / n_repetitions
+        round(reward, 1)
+        
+    LearningCurvePlot.create_plot(reward_array, smoothing_window=31)
+
+    
+    
+        
+    
              
     
 
@@ -43,6 +62,8 @@ if __name__ == '__main__':
     n_repetitions = 500
     n_timesteps = 1000
     smoothing_window = 31
+    
+    
     
     experiment(n_actions=n_actions,n_timesteps=n_timesteps,
                n_repetitions=n_repetitions,smoothing_window=smoothing_window)

@@ -41,7 +41,7 @@ class OIPolicy:
         self.learning_rate = learning_rate
         for n in range(n_actions):
             self.Q_a[n] = initial_value
-        pass
+        
         
     def select_action(self):
         # TO DO: Add own code
