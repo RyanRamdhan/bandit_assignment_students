@@ -36,13 +36,13 @@ class LearningCurvePlot:
         self.fig.savefig(name,dpi=300)
         
     def create_plot(reward_array, smoothing_window):
-        plot = plt.plot(np.arange(reward_array.shape[0]), reward_array)
+        smoothed = smooth(reward_array, window=smoothing_window)
+        plot = plt.plot(np.arange(reward_array.shape[0]), smoothed)
         plt.xlabel('Timesteps')
         plt.ylabel('Average Reward')
         plt.title('Average Reward over Timesteps')
         plt.yticks(np.arange(0, 1.1, 0.1))
-        plt.xticks(np.arange(0, reward_array.shape[0], 50))
-        smooth(reward_array, window=smoothing_window)
+        plt.xticks(np.arange(0, reward_array.shape[0]+1, 100))
         plt.show()
     
     
