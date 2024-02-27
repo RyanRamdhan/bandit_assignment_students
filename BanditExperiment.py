@@ -28,8 +28,7 @@ def experiment(n_actions, n_timesteps, n_repetitions, smoothing_window):
     pass
 
 def run_repetitions(n_timesteps, n_repetitions):
-    cumulative_rewards = np.zeros(n_timesteps)
-    reward_array = np.zeros(n_repetitions)
+    reward_array = np.zeros(n_timesteps)
     for i in range(n_repetitions):
         env = BanditEnvironment(n_actions=10)
         policy = EgreedyPolicy(n_actions=10)
@@ -39,8 +38,7 @@ def run_repetitions(n_timesteps, n_repetitions):
              r = env.act(a)
              policy.update(a, r)
              total_reward += r
-             cumulative_rewards[n] += r
-        reward_array[i] += total_reward
+             reward_array[n] += r
         print(total_reward)
         
     for reward in reward_array:

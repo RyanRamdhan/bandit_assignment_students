@@ -42,7 +42,7 @@ class LearningCurvePlot:
         plt.title('Average Reward over Timesteps')
         plt.yticks(np.arange(0, 1.1, 0.1))
         plt.xticks(np.arange(0, reward_array.shape[0], 50))
-        smooth(reward_array, smoothing_window)
+        smooth(reward_array, window=smoothing_window)
         plt.show()
     
     
