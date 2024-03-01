@@ -45,6 +45,13 @@ class LearningCurvePlot:
         plt.xticks(np.arange(0, reward_array.shape[0]+1, 100))
         plt.show()
     
+    def create_mean_return_plot(value_list, mean_return_list, xlabel, title):
+        plot = plt.plot(value_list, mean_return_list)
+        plt.xlabel(xlabel)
+        plt.ylabel('mean returns')
+        plt.title(title)
+        plt.show()
+    
     
 class ComparisonPlot:
 
