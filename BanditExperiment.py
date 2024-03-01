@@ -17,6 +17,7 @@ def experiment(n_actions, n_timesteps, n_repetitions, smoothing_window):
     #To Do: Write all your experiment code here
     
     # Assignment 1: e-greedy
+    """
     input_policy = EgreedyPolicy(n_actions=10)
     epsilon_list = [0.01, 0.05, 0.1, 0.25]
     mean_return_list = np.zeros(len(epsilon_list))
@@ -43,19 +44,24 @@ def experiment(n_actions, n_timesteps, n_repetitions, smoothing_window):
         mean_return_list[c_list.index(c_value)] = run_repetitions(n_timesteps=1000, n_repetitions=500, input_value=c_value, policy=input_policy)
     
     LearningCurvePlot.create_mean_return_plot(c_list, mean_return_list, xlabel='c values', title='The mean return of each c value')
-    
-    # Assignment 4: Comparison
     """
+    # Assignment 4: Comparison
+    plot = ComparisonPlot(title="My Comparison Plot")
+    
     policy = EgreedyPolicy(n_actions=10)
     reward_array = run_repetitions(n_timesteps=1000, n_repetitions=500, input_value=0.05, policy=policy)
-    ComparisonPlot.add_curve(n_timesteps, reward_array)
+    plot.add_curve(x=np.arange(n_timesteps), y=reward_array, label="Egreedy policy, epsilon: 0.05")
+    
     policy = OIPolicy(n_actions=10)
     reward_array = run_repetitions(n_timesteps=1000, n_repetitions=500, input_value=2.0, policy=policy)
-    ComparisonPlot.add_curve(n_timesteps, reward_array)
+    plot.add_curve(x=np.arange(n_timesteps), y=reward_array, label="OI policy, initial value: 2.0")
+    
     policy = UCBPolicy(n_actions=10)
     reward_array = run_repetitions(n_timesteps=1000, n_repetitions=500, input_value=0.25, policy=policy)
-    ComparisonPlot.add_curve(n_timesteps, reward_array)
-    """
+    plot.add_curve(x=np.arange(n_timesteps), y=reward_array, label="UCB policy, c value: 0.25")
+    
+    plot.save("my_plot.png")
+    
     
     pass
 
@@ -81,7 +87,7 @@ def run_repetitions(n_timesteps, n_repetitions, input_value, policy):
         reward = reward / n_repetitions
         round(reward, 1)
     
-    LearningCurvePlot.create_plot(reward_array, smoothing_window=31)
+    #LearningCurvePlot.create_plot(reward_array, smoothing_window=31)
     
     return reward_array
     
