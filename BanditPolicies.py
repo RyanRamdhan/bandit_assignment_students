@@ -19,13 +19,14 @@ class EgreedyPolicy:
         
     def select_action(self, epsilon):
         # TO DO: Add own code
-        if np.random.rand() > epsilon:
-            a = np.argmax(self.Q_a)
-        else:
-            a = np.random.randint(self.n_actions)
+        for n in range(self.n_actions):
+            if self.Q_a[n] == np.argmax(self.Q_a):
+                self.Q_a[n] = 1 - epsilon
+            else:
+                self.Q_a[n] = epsilon / (self.n_actions - 1)
                 
         #execute max action         
-        return a
+        return np.argmax(self.Q_a)
         
     def update(self,a,r):
         # TO DO: Add own code
