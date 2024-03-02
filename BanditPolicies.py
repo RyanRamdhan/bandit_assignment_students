@@ -12,6 +12,7 @@ from BanditEnvironment import BanditEnvironment
 
 class EgreedyPolicy:
     def __init__(self, n_actions=10):
+        #Initialize nuber of actions, Q(a), and n(a)
         self.n_actions = n_actions
         self.Q_a = np.zeros(n_actions)
         self.n_a = np.zeros(n_actions)
@@ -28,34 +29,38 @@ class EgreedyPolicy:
                 print("Error occurred:", e)
                 print("Float causing the error:", self.probability_array[np.where(np.isnan(self.probability_array))])
         """
-        
+        #Select action bases on e-greedy strategy
         for n in range(self.n_actions):
             if self.Q_a[n] == np.argmax(self.Q_a):
+                #give the optimal action probability of 1 - epsilon
                 self.Q_a[n] = 1 - epsilon
             else:
+                #give low probabilities to actions that are not optimal
                 self.Q_a[n] = epsilon / (self.n_actions - 1)
     
         #execute max action  
         return np.argmax(self.Q_a)  
     
     def update(self,a,r):
-        # TO DO: Add own code
         self.n_a[a] += 1
+        #update Q(a) based on observed rewards
         self.Q_a[a] += (1/self.n_a[a]) * (r - self.Q_a[a])
         
 
 class OIPolicy:
 
     def __init__(self, n_actions=10, initial_value=2.0, learning_rate=0.1):
+        #Initialize nuber of actions, Q(a), and n(a) and learning rate
         self.n_actions = n_actions
         self.Q_a = np.zeros(n_actions)
         self.learning_rate = learning_rate
+        #give each element in Q(a) an initial value
         for n in range(n_actions):
             self.Q_a[n] = initial_value
         
         
     def select_action(self, input_value, t):
-        # TO DO: Add own code
+        #select action based on optimistic initialization
         for n in range(self.n_actions):
             if self.Q_a[n] == np.argmax(self.Q_a):
                 self.Q_a[n] = 1
@@ -65,26 +70,29 @@ class OIPolicy:
         return np.argmax(self.Q_a)
         
     def update(self,a,r):
-        # TO DO: Add own code
+        #update Q(a) using the learning rate
         self.Q_a[a] += self.learning_rate * (r - self.Q_a[a])
         
 
 class UCBPolicy:
 
     def __init__(self, n_actions=10):
+        #Initialize nuber of actions, Q(a), and n(a)
         self.n_actions = n_actions
         self.Q_a = np.zeros(n_actions)
         self.n_a = np.zeros(n_actions)
     
     def select_action(self, c, t):
-        # TO DO: Add own code
+        #treat action as infinity when n(a) = 0
         for n in range(self.n_actions):
             if self.n_a[n] == 0:
                 self.Q_a[n] = np.inf
                 return np.argmax(self.Q_a)
-               
+            
+            #calculate the UCB's   
             values = self.Q_a + c * np.sqrt(np.log(t) / self.n_a)   
              
+            #select action based on UCB strategy
             if self.Q_a[n] == np.argmax(values):
                 self.Q_a[n] = 1
             else:
@@ -93,8 +101,8 @@ class UCBPolicy:
         return np.argmax(self.Q_a)
         
     def update(self,a,r):
-        # TO DO: Add own code
         self.n_a[a] += 1
+        #Update Q(a) based on observed reward
         if self.n_a[a] != 0:
             self.Q_a[a] += (1/self.n_a[a]) * (r - self.Q_a[a])
     
