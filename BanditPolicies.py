@@ -15,19 +15,29 @@ class EgreedyPolicy:
         self.n_actions = n_actions
         self.Q_a = np.zeros(n_actions)
         self.n_a = np.zeros(n_actions)
-        
+        self.probability_array = np.zeros(n_actions)
         
     def select_action(self, epsilon, t):
         # TO DO: Add own code
+        """if self.Q_a.all() == 0:
+            for element in self.probability_array:
+                element = 1.0/self.n_actions
+            try:    
+                return np.random.choice(self.n_actions, self.probability_array) 
+            except TypeError as e:
+                print("Error occurred:", e)
+                print("Float causing the error:", self.probability_array[np.where(np.isnan(self.probability_array))])
+        """
+        
         for n in range(self.n_actions):
             if self.Q_a[n] == np.argmax(self.Q_a):
                 self.Q_a[n] = 1 - epsilon
             else:
                 self.Q_a[n] = epsilon / (self.n_actions - 1)
-                
-        #execute max action         
-        return np.argmax(self.Q_a)
-        
+    
+        #execute max action  
+        return np.argmax(self.Q_a)  
+    
     def update(self,a,r):
         # TO DO: Add own code
         self.n_a[a] += 1
@@ -68,31 +78,25 @@ class UCBPolicy:
     
     def select_action(self, c, t):
         # TO DO: Add own code
-        """for n in range(self.n_actions):
+        for n in range(self.n_actions):
             if self.n_a[n] == 0:
-                print(self.Q_a[n])
-                return int(self.Q_a[n])
-            
-            
-            values = self.Q_a + c * np.sqrt(np.log(t) / self.n_a)    
+                self.Q_a[n] = np.inf
+                return np.argmax(self.Q_a)
+               
+            values = self.Q_a + c * np.sqrt(np.log(t) / self.n_a)   
+             
             if self.Q_a[n] == np.argmax(values):
                 self.Q_a[n] = 1
             else:
                 self.Q_a[n] = 0
-        print(np.argmax(self.Q_a))"""
-        values = np.zeros(self.n_actions)
-        for a in range(self.n_actions):
-            if self.n_a[a] == 0:
-                values[a] = np.inf
-            else:
-                values[a] = self.Q_a[a] + c * np.sqrt(np.log(t) / self.n_a)
-        return np.argmax(values)
+        
+        return np.argmax(self.Q_a)
         
     def update(self,a,r):
         # TO DO: Add own code
         self.n_a[a] += 1
-        
-        self.Q_a[a] += (1/self.n_a[a]) * (r - self.Q_a[a])
+        if self.n_a[a] != 0:
+            self.Q_a[a] += (1/self.n_a[a]) * (r - self.Q_a[a])
     
 def test():
     n_actions = 10

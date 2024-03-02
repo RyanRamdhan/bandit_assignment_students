@@ -17,51 +17,51 @@ def experiment(n_actions, n_timesteps, n_repetitions, smoothing_window):
     #To Do: Write all your experiment code here
     
     # Assignment 1: e-greedy
-    """
-    input_policy = EgreedyPolicy(n_actions=10)
+    
+    """input_policy1 = EgreedyPolicy(n_actions=10)
     epsilon_list = [0.01, 0.05, 0.1, 0.25]
     mean_return_list = np.zeros(len(epsilon_list))
     for epsilon_value in epsilon_list:
-        mean_return_list[epsilon_list.index(epsilon_value)] = run_repetitions(n_timesteps=1000, n_repetitions=500, input_value=epsilon_value, policy=input_policy)
+        mean_return_list[epsilon_list.index(epsilon_value)] = run_repetitions(n_timesteps=1000, n_repetitions=500, input_value=epsilon_value, policy=input_policy1)
     
-    LearningCurvePlot.create_mean_return_plot(epsilon_list, mean_return_list, xlabel='epsilon values', title='The mean return of each epsilon value')
+    LearningCurvePlot.create_mean_return_plot(epsilon_list, mean_return_list, xlabel='epsilon values', title='The mean return of each epsilon value')"""
     
     # Assignment 2: Optimistic init
-    input_policy = OIPolicy(n_actions=10)
+    """input_policy2 = OIPolicy(n_actions=10)
     initial_value_list = [0.1, 0.5, 1.0, 2.0]
     mean_return_list = np.zeros(len(initial_value_list))
     for initial_value in initial_value_list:
-        mean_return_list[initial_value_list.index(initial_value)] = run_repetitions(n_timesteps=1000, n_repetitions=500, input_value=initial_value, policy=input_policy)
+        mean_return_list[initial_value_list.index(initial_value)] = run_repetitions(n_timesteps=1000, n_repetitions=500, input_value=initial_value, policy=input_policy2)
     
-    LearningCurvePlot.create_mean_return_plot(initial_value_list, mean_return_list, xlabel='initial values', title='The mean return of each initial value')
+    LearningCurvePlot.create_mean_return_plot(initial_value_list, mean_return_list, xlabel='initial values', title='The mean return of each initial value')"""
     
     
     # Assignment 3: UCB
-    input_policy = UCBPolicy(n_actions=10)
+    """input_policy3 = UCBPolicy(n_actions=10)
     c_list = [0.01, 0.05, 0.1, 0.25, 0.5, 1.0]
     mean_return_list = np.zeros(len(c_list))
     for c_value in c_list:
-        mean_return_list[c_list.index(c_value)] = run_repetitions(n_timesteps=1000, n_repetitions=500, input_value=c_value, policy=input_policy)
+        mean_return_list[c_list.index(c_value)] = run_repetitions(n_timesteps=1000, n_repetitions=500, input_value=c_value, policy=input_policy3)
     
-    LearningCurvePlot.create_mean_return_plot(c_list, mean_return_list, xlabel='c values', title='The mean return of each c value')
-    """
+    LearningCurvePlot.create_mean_return_plot(c_list, mean_return_list, xlabel='c values', title='The mean return of each c value')"""
+    
     # Assignment 4: Comparison
     plot = ComparisonPlot(title="My Comparison Plot")
     
     used_policy1 = EgreedyPolicy(n_actions=10)
-    reward_array = run_repetitions(n_timesteps=1000, n_repetitions=500, input_value=0.05, policy=used_policy1)
+    reward_array = run_repetitions(n_timesteps=1000, n_repetitions=500, input_value=0.1, policy=used_policy1)
     smoothed = smooth(reward_array, smoothing_window)
-    plot.add_curve(x=np.arange(n_timesteps), y=smoothed, label="Egreedy policy, epsilon: 0.05")
+    plot.add_curve(x=np.arange(n_timesteps), y=smoothed, label="Egreedy policy")
     
-    used_policy2 = OIPolicy(n_actions=10, initial_value=2.0)
-    reward_array = run_repetitions(n_timesteps=1000, n_repetitions=500, input_value=2.0, policy=used_policy2)
+    used_policy2 = OIPolicy(n_actions=10, initial_value=0.1)
+    reward_array = run_repetitions(n_timesteps=1000, n_repetitions=500, input_value=0.1, policy=used_policy2)
     smoothed = smooth(reward_array, smoothing_window)
-    plot.add_curve(x=np.arange(n_timesteps), y=smoothed, label="OI policy, initial value: 2.0")
+    plot.add_curve(x=np.arange(n_timesteps), y=smoothed, label="OI policy")
     
-    """used_policy3 = UCBPolicy(n_actions=10)
-    reward_array = run_repetitions(n_timesteps=1000, n_repetitions=500, input_value=0.25, policy=used_policy3)
+    used_policy3 = UCBPolicy(n_actions=10)
+    reward_array = run_repetitions(n_timesteps=1000, n_repetitions=500, input_value=0.1, policy=used_policy3)
     smoothed = smooth(reward_array, smoothing_window)
-    plot.add_curve(x=np.arange(n_timesteps), y=smoothed, label="UCB policy, c value: 0.25")"""
+    plot.add_curve(x=np.arange(n_timesteps), y=smoothed, label="UCB policy")
     
     plot.save("my_plot.png")
     

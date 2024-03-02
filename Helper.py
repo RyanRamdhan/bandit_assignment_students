@@ -74,6 +74,7 @@ class ComparisonPlot:
         
     def save(self,name='test.png'):
         ''' name: string for filename of saved figure '''
+        self.ax.set_yticks(np.arange(0, 1.1, 0.1))
         self.ax.legend()
         self.fig.savefig(name,dpi=300)
 
