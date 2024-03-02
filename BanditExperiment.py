@@ -48,20 +48,20 @@ def experiment(n_actions, n_timesteps, n_repetitions, smoothing_window):
     # Assignment 4: Comparison
     plot = ComparisonPlot(title="My Comparison Plot")
     
-    policy = EgreedyPolicy(n_actions=10)
-    reward_array = run_repetitions(n_timesteps=1000, n_repetitions=500, input_value=0.05, policy=policy)
+    used_policy1 = EgreedyPolicy(n_actions=10)
+    reward_array = run_repetitions(n_timesteps=1000, n_repetitions=500, input_value=0.05, policy=used_policy1)
     smoothed = smooth(reward_array, smoothing_window)
     plot.add_curve(x=np.arange(n_timesteps), y=smoothed, label="Egreedy policy, epsilon: 0.05")
     
-    policy = OIPolicy(n_actions=10)
-    reward_array = run_repetitions(n_timesteps=1000, n_repetitions=500, input_value=2.0, policy=policy)
+    used_policy2 = OIPolicy(n_actions=10, initial_value=2.0)
+    reward_array = run_repetitions(n_timesteps=1000, n_repetitions=500, input_value=2.0, policy=used_policy2)
     smoothed = smooth(reward_array, smoothing_window)
     plot.add_curve(x=np.arange(n_timesteps), y=smoothed, label="OI policy, initial value: 2.0")
     
-    policy = UCBPolicy(n_actions=10)
-    reward_array = run_repetitions(n_timesteps=1000, n_repetitions=500, input_value=0.25, policy=policy)
+    """used_policy3 = UCBPolicy(n_actions=10)
+    reward_array = run_repetitions(n_timesteps=1000, n_repetitions=500, input_value=0.25, policy=used_policy3)
     smoothed = smooth(reward_array, smoothing_window)
-    plot.add_curve(x=np.arange(n_timesteps), y=smoothed, label="UCB policy, c value: 0.25")
+    plot.add_curve(x=np.arange(n_timesteps), y=smoothed, label="UCB policy, c value: 0.25")"""
     
     plot.save("my_plot.png")
     
@@ -71,23 +71,23 @@ def run_repetitions(n_timesteps, n_repetitions, input_value, policy):
     mean_return = 0
     for i in range(n_repetitions):
         env = BanditEnvironment(n_actions=10)
-        policy = EgreedyPolicy(n_actions=10)
+        #policy = EgreedyPolicy(n_actions=10)
         total_reward = 0
         for n in range(n_timesteps):
-            a = policy.select_action(input_value)
+            a = policy.select_action(input_value, n_timesteps)
             r = env.act(a)
             policy.update(a,r)
             total_reward += r
             reward_array[n] += r
-        mean_return += total_reward
-        print(total_reward)
-    
+            
+        mean_return += total_reward    
     mean_return = (1 / (n_repetitions * n_timesteps)) * mean_return
     print("mean return" + str(mean_return))
-    for reward in reward_array:
-        reward = reward / n_repetitions
-        round(reward, 1)
     
+    
+    for i in range(n_timesteps):
+        reward_array[i] /= n_repetitions
+  
     #LearningCurvePlot.create_plot(reward_array, smoothing_window=31)
     
     return reward_array
