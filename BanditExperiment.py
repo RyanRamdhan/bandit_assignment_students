@@ -93,8 +93,6 @@ def run_repetitions(n_timesteps, n_repetitions, input_value, policy):
             
         mean_return += total_reward    
     mean_return = (1 / (n_repetitions * n_timesteps)) * mean_return
-    print("mean return" + str(mean_return))
-    
     
     for i in range(n_timesteps):
         reward_array[i] /= n_repetitions
