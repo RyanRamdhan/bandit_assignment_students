@@ -63,17 +63,29 @@ class UCBPolicy:
 
     def __init__(self, n_actions=10):
         self.n_actions = n_actions
-        # TO DO: Add own code
-        pass
+        self.Q_a = np.zeros(n_actions)
+        self.n_a = np.zeros(n_actions)
     
     def select_action(self, c, t):
         # TO DO: Add own code
-        a = np.random.randint(0,self.n_actions) # Replace this with correct action selection
-        return a
+        for n in range(self.n_actions):
+            if self.n_a[n] == 0:
+                self.Q_a[n] = np.inf
+                return np.argmax(self.Q_a)
+            
+            values = self.Q_a + c * np.sqrt(np.log(t)/self.n_a)
+            if self.Q_a[n] == np.argmax(values):
+                self.Q_a[n] = 1
+            else:
+                self.Q_a[n] = 0
+        
+        return np.argmax(self.Q_a)
         
     def update(self,a,r):
         # TO DO: Add own code
-        pass
+        self.n_a[a] += 1
+        if self.n_a[a] != 0:
+            self.Q_a[a] += (1/self.n_a[a]) * (r - self.Q_a[a])
     
 def test():
     n_actions = 10

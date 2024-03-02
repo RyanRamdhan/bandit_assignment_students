@@ -50,20 +50,21 @@ def experiment(n_actions, n_timesteps, n_repetitions, smoothing_window):
     
     policy = EgreedyPolicy(n_actions=10)
     reward_array = run_repetitions(n_timesteps=1000, n_repetitions=500, input_value=0.05, policy=policy)
-    plot.add_curve(x=np.arange(n_timesteps), y=reward_array, label="Egreedy policy, epsilon: 0.05")
+    smoothed = smooth(reward_array, smoothing_window)
+    plot.add_curve(x=np.arange(n_timesteps), y=smoothed, label="Egreedy policy, epsilon: 0.05")
     
     policy = OIPolicy(n_actions=10)
     reward_array = run_repetitions(n_timesteps=1000, n_repetitions=500, input_value=2.0, policy=policy)
-    plot.add_curve(x=np.arange(n_timesteps), y=reward_array, label="OI policy, initial value: 2.0")
+    smoothed = smooth(reward_array, smoothing_window)
+    plot.add_curve(x=np.arange(n_timesteps), y=smoothed, label="OI policy, initial value: 2.0")
     
     policy = UCBPolicy(n_actions=10)
     reward_array = run_repetitions(n_timesteps=1000, n_repetitions=500, input_value=0.25, policy=policy)
-    plot.add_curve(x=np.arange(n_timesteps), y=reward_array, label="UCB policy, c value: 0.25")
+    smoothed = smooth(reward_array, smoothing_window)
+    plot.add_curve(x=np.arange(n_timesteps), y=smoothed, label="UCB policy, c value: 0.25")
     
     plot.save("my_plot.png")
     
-    
-    pass
 
 def run_repetitions(n_timesteps, n_repetitions, input_value, policy):
     reward_array = np.zeros(n_timesteps)
