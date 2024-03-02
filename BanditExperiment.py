@@ -57,7 +57,7 @@ def experiment(n_actions, n_timesteps, n_repetitions, smoothing_window):
     #LearningCurvePlot.create_mean_return_plot(c_list, mean_return_list, xlabel='c values', title='The mean return of each c value')
     
     # Assignment 4: Comparison
-    """plot = ComparisonPlot(title="My Comparison Plot")
+    plot = ComparisonPlot(title="My Comparison Plot")
     
     used_policy1 = EgreedyPolicy(n_actions=10)
     reward_array = run_repetitions(n_timesteps=1000, n_repetitions=500, input_value=0.1, policy=used_policy1)
@@ -74,7 +74,7 @@ def experiment(n_actions, n_timesteps, n_repetitions, smoothing_window):
     smoothed = smooth(reward_array, smoothing_window)
     plot.add_curve(x=np.arange(n_timesteps), y=smoothed, label="UCB policy")
     
-    plot.save("my_plot.png")"""
+    plot.save("comparison_plot.png")
     
 
 def run_repetitions(n_timesteps, n_repetitions, input_value, policy):

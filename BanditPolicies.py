@@ -82,15 +82,14 @@ class UCBPolicy:
         self.Q_a = np.zeros(n_actions)
         self.n_a = np.zeros(n_actions)
     
-    def select_action(self, c, t):
+    def select_action(self, c, t): 
+        #calculate the UCB's
+        values = self.Q_a + c * np.sqrt(np.log(t) / self.n_a)
         #treat action as infinity when n(a) = 0
         for n in range(self.n_actions):
             if self.n_a[n] == 0:
                 self.Q_a[n] = np.inf
                 return np.argmax(self.Q_a)
-            
-            #calculate the UCB's   
-            values = self.Q_a + c * np.sqrt(np.log(t) / self.n_a)   
              
             #select action based on UCB strategy
             if self.Q_a[n] == np.argmax(values):
@@ -103,8 +102,7 @@ class UCBPolicy:
     def update(self,a,r):
         self.n_a[a] += 1
         #Update Q(a) based on observed reward
-        if self.n_a[a] != 0:
-            self.Q_a[a] += (1/self.n_a[a]) * (r - self.Q_a[a])
+        self.Q_a[a] += (1/self.n_a[a]) * (r - self.Q_a[a])
     
 def test():
     n_actions = 10
